@@ -18,7 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $guarded=[];
-    
+    public function orders(){
+        return $this->hasMany(Order::class,'costumer_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
