@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->foreign('costumer_id')->references('id')->on('users')->onDelete('set null');
             $table->decimal('total_price');
             $table->integer('total_amount');
+            $table->integer('status')->default(OrderStatus::DRAFT);
             $table->timestamps();
         });
     }
