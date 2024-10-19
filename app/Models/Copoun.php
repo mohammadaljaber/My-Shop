@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Copoun extends Model
 {
-    //
+    protected $guarded=[];
 }
