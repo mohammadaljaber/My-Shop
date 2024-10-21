@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
     protected $guarded=[];
 
     public function coupons(): MorphMany
@@ -17,5 +19,5 @@ class Product extends Model
     public function stocks(){
         return $this->hasMany(Stock::class,'product_id');
     }
-    
+
 }

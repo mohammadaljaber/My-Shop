@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('times');
             $table->boolean('status')->default(CopounStatus::INACTIVE);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

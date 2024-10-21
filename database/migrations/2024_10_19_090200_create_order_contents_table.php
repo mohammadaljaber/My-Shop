@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price');
             $table->morphs('contentable');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('total_amount');
             $table->integer('status')->default(OrderStatus::DRAFT);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

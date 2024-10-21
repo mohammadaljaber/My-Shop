@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->boolean('status')->default(ProductStatus::ACTIVE);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
