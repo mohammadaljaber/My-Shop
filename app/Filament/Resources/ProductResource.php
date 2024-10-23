@@ -5,10 +5,12 @@ namespace App\Filament\Resources;
 use App\Enums\ProductStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Filament\Resources\ProductResource\RelationManagers\StocksRelationManager;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -25,40 +27,46 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('status')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category','name')
-                    ->native(false)
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                Forms\Components\Select::make('brand_id')
-                    ->relationship('brand','name')
-                    ->native(false)
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->inputMode('decimal')
-                    // ->step(0,01)
-                    ->prefix('$'),
-                Forms\Components\TextInput::make('quantity')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\FileUpload::make('image')
+                    Forms\Components\Toggle::make('status')
+                        ->required(),
+                    Forms\Components\FileUpload::make('image')
                         ->image()
                         ->directory('products')
                         ->required(),
+                    Forms\Components\Textarea::make('description')
+                        ->required()
+                        // ->columnSpanFull(),
+                    ])->columns(2),
+                forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Select::make('category_id')
+                        ->relationship('category','name')
+                        ->native(false)
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Forms\Components\Select::make('brand_id')
+                        ->relationship('brand','name')
+                        ->native(false)
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Forms\Components\TextInput::make('price')
+                        ->required()
+                        ->numeric()
+                        ->inputMode('decimal')
+                        // ->step(0,01)
+                        ->prefix('$'),
+                    Forms\Components\TextInput::make('quantity')
+                        ->required()
+                        ->numeric()
+                        ->default(0),
+                ])->columns(4),
 
             ]);
     }
@@ -117,7 +125,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            StocksRelationManager::class
         ];
     }
 

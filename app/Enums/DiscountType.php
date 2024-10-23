@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum DiscountType:int
 {
-    case VALUE = 0;
-    case PERCENTAGE=1;
+    case VALUE = 1;
+    case PERCENTAGE=2;
 }

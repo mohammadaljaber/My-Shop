@@ -20,10 +20,11 @@ return new class extends Migration
             $table->string('image');
             $table->integer('quantity');
             $table->integer('discount');
-            $table->integer('discount_type')->default(DiscountType::VALUE);
+            $table->integer('discount_type')->default(DiscountType::VALUE->value);
             $table->json('properties');
-            $table->boolean('status')->default(ProductStatus::ACTIVE);
+            $table->boolean('status')->default(ProductStatus::ACTIVE->value);
             $table->timestamps();
+
             $table->softDeletes();
         });
     }
