@@ -20,11 +20,15 @@ class Stock extends Model
         return $this->morphMany(OrderContent::class,'contentable');
     }
 
-    protected function Properties():Attribute{
-        return Attribute::make(
-            get:fn($value)=>json_decode($value),
-            set:fn($value)=>json_encode($value)
-        );
-    }
+    // protected function Properties():Attribute{
+    //     return Attribute::make(
+    //         get:fn($value)=>json_decode($value),
+    //         set:fn($value)=>json_encode($value)
+    //     );
+    // }
+
+    protected $casts=[
+        'properties'=>'array'
+    ];
 
 }
