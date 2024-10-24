@@ -32,8 +32,7 @@ class ProductResource extends Resource
                     Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\Toggle::make('status')
-                        ->required(),
+                    Forms\Components\Toggle::make('status'),
                     Forms\Components\FileUpload::make('image')
                         ->image()
                         ->directory('products')
@@ -134,7 +133,7 @@ class ProductResource extends Resource
         return [
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
-            'view' => Pages\ViewProduct::route('/{record}'),
+            // 'view' => Pages\ViewProduct::route('/{record}'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }

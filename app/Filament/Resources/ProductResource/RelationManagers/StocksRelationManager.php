@@ -2,15 +2,17 @@
 
 namespace App\Filament\Resources\ProductResource\RelationManagers;
 
-use App\Enums\DiscountType;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\DiscountType;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\Console\Input\Input;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class StocksRelationManager extends RelationManager
 {
@@ -20,39 +22,47 @@ class StocksRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('price')
-                    ->nullable()
-                    ->prefix('$')
-                    ->numeric()
-                    ->inputMode('decimal'),
-                Forms\Components\TextInput::make('quantity')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\Select::make('discount_type')
-                    ->options([
-                        DiscountType::PERCENTAGE->value=>"PERCENTAGE",
-                        DiscountType::VALUE->value=>"VALUE"
-                    ])
-                    ->native(false)
-                    ->nullable()
-                    ->live(),
-                Forms\Components\TextInput::make('discount')
-                    ->numeric()
-                    ->nullable()
-                    ->visible(fn(Get $get)=>$get('discount_type'))
-                    ->live(),
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->directory('stocks')
-                    ->required(),
+                forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('price')
+                            ->nullable()
+                            ->prefix('$')
+                            ->numeric()
+                            ->inputMode('decimal'),
+                        Forms\Components\TextInput::make('quantity')
+                            ->required()
+                            ->numeric(),
+                        Forms\Components\Toggle::make('status'),
+                    ])->columns(3),
+                forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Select::make('discount_type')
+                        ->default(0)
+                        ->options([
+                            DiscountType::PERCENTAGE->value=>"PERCENTAGE",
+                            DiscountType::VALUE->value=>"VALUE"
+                        ])
+                        ->native(false)
+                        ->nullable()
+                        ->live(),
+                    Forms\Components\TextInput::make('discount')
+                        ->numeric()
+                        ->nullable()
+                        ->visible(fn(Get $get)=>$get('discount_type'))
+                        ->live(),
+                    Forms\Components\FileUpload::make('image')
+                        ->image()
+                        ->directory('stocks')
+                        ->required(),
+                        ])->columns(3),
+                Forms\Components\KeyValue::make('properties')
+                    ->columnSpanFull()
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
             ])

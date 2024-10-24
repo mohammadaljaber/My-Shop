@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('price')->nullable();
             $table->string('image');
             $table->integer('quantity');
-            $table->integer('discount');
+            $table->integer('discount')->nullable();
             $table->integer('discount_type')->default(DiscountType::VALUE->value);
             $table->json('properties');
             $table->boolean('status')->default(ProductStatus::ACTIVE->value);
