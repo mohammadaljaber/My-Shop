@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DiscountType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Stock extends Model
 {
-    use SoftDeletes;
     protected $guarded=[];
 
     public function product(){
@@ -20,15 +20,10 @@ class Stock extends Model
         return $this->morphMany(OrderContent::class,'contentable');
     }
 
-    // protected function Properties():Attribute{
-    //     return Attribute::make(
-    //         get:fn($value)=>json_decode($value),
-    //         set:fn($value)=>json_encode($value)
-    //     );
-    // }
+
 
     protected $casts=[
-        'properties'=>'array'
+        'properties'=>'json'
     ];
 
 }

@@ -8,6 +8,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Enums\DiscountType;
+use App\Models\Stock;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\Console\Input\Input;
@@ -55,7 +56,11 @@ class StocksRelationManager extends RelationManager
                         ->directory('stocks')
                         ->required(),
                         ])->columns(3),
-                Forms\Components\KeyValue::make('properties')
+                Forms\Components\Repeater::make('properties')
+                    ->schema([
+                        Forms\Components\TextInput::make('key')->required(),
+                        Forms\Components\TextInput::make('value')->required()
+                    ])->columns(2)
                     ->columnSpanFull()
             ]);
     }
@@ -64,7 +69,15 @@ class StocksRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('price')->prefix('$'),
+                Tables\Columns\TextColumn::make('quantity'),
+                Tables\Columns\TextColumn::make('discount')->prefix(
+                    fn(Stock $record)=>$record->discount_type==DiscountType::PERCENTAGE->value?'%':(
+                        $record->discount_type==DiscountType::VALUE->value?'$':''
+                    )
+                ),
+                Tables\Columns\ImageColumn::make('image')->circular(),
+                Tables\Columns\IconColumn::make('status')->boolean(),
             ])
             ->filters([
                 //
@@ -73,6 +86,7 @@ class StocksRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
