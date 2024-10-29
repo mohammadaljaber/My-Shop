@@ -12,7 +12,9 @@ use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Enums\DiscountType;
+use Illuminate\Support\Str;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\CouponResource\Pages;
@@ -100,13 +102,25 @@ class CouponResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discount')
                     ->numeric()
-                    ->sortable(),
+                    ->prefix(
+                        fn($record)=>$record->discount_type==DiscountType::PERCENTAGE->value?'% ':(
+                            $record->discount_type==DiscountType::VALUE->value?'$ ':''
+                        )
+                    ),
                 Tables\Columns\TextColumn::make('couponable_type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('couponable_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('times')
+                    ->label('Type')
+                    ->formatStateUsing(
+                        fn($record)=>Str::afterLast($record->couponable_type, '\\')
+                    )
+                    ->badge()
+                    ->color(function($record){
+                        return match(Str::afterLast($record->couponable_type, '\\')){
+                            'Brand' => 'danger',
+                            'Product' => 'warning',
+                            'Category' => 'success',
+                        };
+                    }),
+                Tables\Columns\TextColumn::make('couponable.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('status')
@@ -146,7 +160,7 @@ class CouponResource extends Resource
         return [
             'index' => Pages\ListCoupons::route('/'),
             'create' => Pages\CreateCoupon::route('/create'),
-            'view' => Pages\ViewCoupon::route('/{record}'),
+            // 'view' => Pages\ViewCoupon::route('/{record}'),
             'edit' => Pages\EditCoupon::route('/{record}/edit'),
         ];
     }

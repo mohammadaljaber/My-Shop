@@ -4,16 +4,18 @@ namespace App\Filament\Resources\ProductResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Stock;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Enums\DiscountType;
-use App\Models\Stock;
 use Filament\Support\Enums\Alignment;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\Console\Input\Input;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use Illuminate\Support\Facades\Storage;
 
 class StocksRelationManager extends RelationManager
 {
@@ -88,7 +90,10 @@ class StocksRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->before(fn(Model $record)=>
+                            Storage::disk('public')->delete($record->image)
+                        ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

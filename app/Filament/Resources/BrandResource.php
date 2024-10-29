@@ -11,12 +11,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
-
+    protected static ?string $navigationGroup='Product Management';
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
 
     public static function form(Form $form): Form
@@ -63,7 +65,10 @@ class BrandResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->before(fn(Model $record)=>
+                            Storage::disk('public')->delete($record->image)
+                        ),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
