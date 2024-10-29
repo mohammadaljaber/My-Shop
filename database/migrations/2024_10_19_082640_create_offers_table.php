@@ -17,9 +17,8 @@ return new class extends Migration
             $table->decimal('price');
             $table->date('start_date');
             $table->date('end_date');
-            $table->boolean('status')->default(OfferStatus::INACTIVE);
+            $table->boolean('status')->default(OfferStatus::INACTIVE->value);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

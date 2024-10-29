@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OfferItem extends Model
 {
-    use SoftDeletes;
     protected $guarded=[];
     public function offer(){
         return $this->belongsTo(Offer::class,'offer_id');
