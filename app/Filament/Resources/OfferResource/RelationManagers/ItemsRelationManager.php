@@ -18,9 +18,17 @@ class ItemsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('price')
+                Forms\Components\TextInput::make('quantity')
+                    ->numeric()
+                    ->minValue(1)
+                    ->required(),
+                Forms\Components\Select::make('product_id')
+                    ->relationship('products','name')
+                    ->preload()
+                    ->searchable()
+                    ->label('product')
+                    ->native(false)
                     ->required()
-                    ->maxLength(255),
             ]);
     }
 
@@ -28,13 +36,8 @@ class ItemsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                // Forms\Components\Select::make('stock_id')
-                // ->label('Product')
-                // ->relationship('stocks','')
-                // ->native(false)
-                // ->searchable()
-                // ->preload()
-                // ->required(),
+                Tables\Columns\TextColumn::make('product.name'),
+                Tables\Columns\TextColumn::make('quantity'),
             ])
             ->filters([
                 //
