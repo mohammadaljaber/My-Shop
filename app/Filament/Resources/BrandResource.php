@@ -21,6 +21,17 @@ class BrandResource extends Resource
     protected static ?string $navigationGroup='Product Management';
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
 
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return static::getModel()::count()==0?'danger':(static::getModel()::count()<3?'warning':'success');
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -41,7 +52,8 @@ class BrandResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

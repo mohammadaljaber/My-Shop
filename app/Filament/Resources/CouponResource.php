@@ -27,6 +27,16 @@ class CouponResource extends Resource
     protected static ?string $navigationGroup='Coupons & Offers Management';
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return static::getModel()::count()==0?'danger':(static::getModel()::count()<3?'warning':'success');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

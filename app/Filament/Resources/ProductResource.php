@@ -23,6 +23,16 @@ class ProductResource extends Resource
     protected static ?string $navigationGroup='Product Management';
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return static::getModel()::count()==0?'danger':(static::getModel()::count()<10?'warning':'success');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -84,7 +94,8 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('brand_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('price')
                     ->money()
                     ->sortable(),
