@@ -6,11 +6,11 @@ use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
 {
-    protected function response($message, $data = null, $code = 200): JsonResponse
+    protected function response($message, $data = null, $code = 200):jsonResponse
     {
-        $response = ['message' => $message];
+
         if (!is_null($data)) {
-            $response = array_merge( $data, $response);
+            $response = array_merge( ['message'=>$message],['data'=>$data] );
         }
         return $this->jsonResponse($response, $code);
     }
@@ -26,6 +26,19 @@ trait ApiResponse
     {
         return response()->json($data, $code);
     }
+
+    protected function showOne($instance, $resource, $message = 'success', $code = 200): JsonResponse
+    {
+        return $this->response($message, new $resource($instance));
+    }
+
+    protected function showCollection($data, $resource, $message = 'success', $code = 200):jsonResponse
+    {
+        $response = $resource::collection($data);
+        return $this->response($message, $response);
+    }
+
+
 
 }
 
