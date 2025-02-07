@@ -28,6 +28,10 @@ class Stock extends Model
         ));
     }
 
+    public function imageUrl(){
+        return Storage::disk('public')->url($this->image);
+    }
+
     protected $casts=[
         'properties'=>'json'
     ];

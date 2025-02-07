@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Repositories\Category;
 
 use App\Http\Controllers\Repositories\BaseRepository;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
 
 class CategoryRepository extends BaseRepository{
 
@@ -13,10 +14,11 @@ class CategoryRepository extends BaseRepository{
     }
 
     public function index($search=null){
-        return Category::when($search,function($q)use($search){
+        return $this->model::when($search,function($q)use($search){
             $q->where('name','like','%'.$search.'%');
         })->latest()->get();
     }
+
 
 
 }

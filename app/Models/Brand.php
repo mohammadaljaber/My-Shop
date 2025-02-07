@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Brand extends Model
 {
@@ -19,4 +20,9 @@ class Brand extends Model
     {
         return $this->morphMany(Coupon::class, 'couponable');
     }
+
+    public function imageUrl(){
+        return Storage::disk('public')->url($this->image);
+    }
+
 }

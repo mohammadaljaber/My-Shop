@@ -8,9 +8,10 @@ trait ApiResponse
 {
     protected function response($message, $data = null, $code = 200):jsonResponse
     {
-
         if (!is_null($data)) {
             $response = array_merge( ['message'=>$message],['data'=>$data] );
+        }else{
+            return $this->jsonResponse($message);
         }
         return $this->jsonResponse($response, $code);
     }
@@ -32,12 +33,17 @@ trait ApiResponse
         return $this->response($message, new $resource($instance));
     }
 
-    protected function showCollection($data, $resource, $message = 'success', $code = 200):jsonResponse
+    protected function showCollection($data, $resource, $message = 'success', $code = 200)
     {
         $response = $resource::collection($data);
         return $this->response($message, $response);
     }
-
+    protected function paginationResponse($data,$resource, $message = 'success', $code = 200)
+    {
+        $response = $resource::collection($data->itemsOnly());
+        $response=array_merge(['items'=>$response],['pagination'=>$data->getPagination()]);
+        return $this->response($message,$response);
+    }
 
 
 }

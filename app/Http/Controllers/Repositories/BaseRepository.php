@@ -10,10 +10,10 @@ abstract class BaseRepository{
     public function __construct(protected Model $model){}
 
     public function index(){
-        return $this->model::get();
+        return $this->model::paginate();
     }
 
-    public function show(Model $model): Model
+    public function show(Model $model)
     {
         return $model;
     }
@@ -36,5 +36,9 @@ abstract class BaseRepository{
         return $model->delete();
     }
 
+    public function getRelation(Model $model ,?string $relation)
+    {
+        return $model->load($relation);
+    }
 
 }
