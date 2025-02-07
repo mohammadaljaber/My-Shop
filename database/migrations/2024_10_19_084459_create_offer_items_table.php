@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('offer_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('offer_id')->constrained('offers')->cascadeOnDelete();
-            $table->foreignId('stock_id')->constrained('stocks')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

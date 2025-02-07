@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -19,5 +20,16 @@ class Product extends Model
     public function stocks(){
         return $this->hasMany(Stock::class,'product_id');
     }
+    public function category(){
+        return $this->belongsTo(Category::class,'category_id');
+    }
+    public function brand(){
+        return $this->belongsTo(Brand::class,'brand_id');
+    }
+
+    public function imageUrl(){
+        return Storage::disk('public')->url($this->image);
+    }
+
 
 }

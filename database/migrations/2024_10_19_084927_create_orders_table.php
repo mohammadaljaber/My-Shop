@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('costumer_id')->nullable();
             $table->foreign('costumer_id')->references('id')->on('users')->onDelete('set null');
             $table->decimal('total_price');
-            $table->integer('total_amount');
+            $table->integer('total_amount')->nullable();
             $table->integer('status')->default(OrderStatus::DRAFT);
             $table->timestamps();
             $table->softDeletes();
