@@ -64,12 +64,14 @@ class OrderRepository extends BaseRepository{
         foreach($offers as $off){
             $offer=Offer::find($off->id);
             $offerPrice+=$offer->price;
-            foreach($offers->stocks as $stock){
+            $order->stocks=json_encode($off->stocks);
+            foreach($off->stocks as $stock){
                 $stock=Stock::find($stock);
                 $stock->quantity-=1;
                 $stock->update();
             }
         }
+        return $offerPrice;
     }
 
 }
