@@ -18,10 +18,6 @@ class ItemsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('quantity')
-                    ->numeric()
-                    ->minValue(1)
-                    ->required(),
                 Forms\Components\Select::make('product_id')
                     ->relationship('products','name')
                     ->preload()
@@ -37,7 +33,6 @@ class ItemsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product.name'),
-                Tables\Columns\TextColumn::make('quantity'),
             ])
             ->filters([
                 //

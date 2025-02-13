@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Repositories\Order;
 
 use App\Http\Controllers\Repositories\BaseRepository;
+use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
@@ -58,8 +59,17 @@ class OrderRepository extends BaseRepository{
         return $productPrice*$quantity;
     }
 
-    private function attachOffersToOrderItems(){
-
+    private function attachOffersToOrderItems(Order $order,$offers,$quantity=1){
+        $offerPrice=0;
+        foreach($offers as $off){
+            $offer=Offer::find($off->id);
+            $offerPrice+=$offer->price;
+            foreach($offers->stocks as $stock){
+                $stock=Stock::find($stock);
+                $stock->quantity-=1;
+                $stock->update();
+            }
+        }
     }
 
 }
