@@ -1,17 +1,17 @@
-<?
+<?php
 
-namespace App\Http\Controllers\Repositories\Order;
+namespace App\Http\Controllers\Repositories\Orders;
 
-use App\Http\Controllers\Repositories\BaseRepository;
-use App\Models\Offer;
 use App\Models\Order;
+use App\Models\Offer;
 use App\Models\Stock;
+use App\Http\Controllers\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderRepository extends BaseRepository{
 
+class OrdersRepository extends BaseRepository{
 
-    public function __construct(Order $model)
+    public function __construct( Order $model)
     {
         parent::__construct($model);
     }
@@ -20,7 +20,7 @@ class OrderRepository extends BaseRepository{
         return auth()->user->orders;
     }
 
-    public function store($data): Model
+    public function store($data):Model
     {
         $order=auth()->user->orders->cerate([
             'costumer_id'=>auth()->user->id,
@@ -37,11 +37,11 @@ class OrderRepository extends BaseRepository{
     private function storeOrderItems($items,Order $order){
         $total_price=0;
         foreach($items->products as $item){
-            $quantity=$item['products']['count'];
-            $product=Stock::find($item['products']['id']);
+            $quantity=$item['count'];
+            $product=Stock::find($item['id']);
             $total_price+=$this->attachProductToOrderItems($order,$product,$quantity);
         }
-
+        $total_price+=$this->attachOffersToOrderItems($order,$items->offers);
         return $total_price;
     }
 
@@ -59,7 +59,7 @@ class OrderRepository extends BaseRepository{
         return $productPrice*$quantity;
     }
 
-    private function attachOffersToOrderItems(Order $order,$offers,$quantity=1){
+    private function attachOffersToOrderItems(Order $order,$offers){
         $offerPrice=0;
         foreach($offers as $off){
             $offer=Offer::find($off->id);
@@ -75,3 +75,6 @@ class OrderRepository extends BaseRepository{
     }
 
 }
+
+
+

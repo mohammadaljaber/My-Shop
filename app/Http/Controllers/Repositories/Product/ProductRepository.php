@@ -7,7 +7,6 @@ use Closure;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Filters\Product\ByBrand;
-// use Illuminate\Support\Facades\Request;
 use App\Filters\Product\ByPrice;
 use App\Filters\Product\ByCategory;
 use Illuminate\Support\Facades\Pipeline;
@@ -42,6 +41,6 @@ class ProductRepository extends BaseRepository{
         return $product;
     }
 
-    
+
 
 }

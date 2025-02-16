@@ -10,4 +10,4 @@ Route::post('categories',[CategoryController::class,'index']);
 Route::post('brands',[BrandController::class,'index']);
 Route::post('products',[ProductController::class,'index']);
 Route::get('stocks/{product}',[ProductController::class,'getStocks']);
-Route::post('newOrder',[OrderController::class,'index']);
+Route::post('newOrder',[OrderController::class,'store']);
