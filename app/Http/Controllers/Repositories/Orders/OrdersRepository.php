@@ -47,7 +47,7 @@ class OrdersRepository extends BaseRepository{
 
     private function attachProductToOrderItems(Order $order,Stock $product,$quantity=1){
         $productPrice=$product->price;
-        ($productPrice)?:$product->product->price;
+        ($productPrice!=null)?:$productPrice=$product->product->price;
         $order->contents()->create([
             'quantity'=>$quantity,
             'price'=>$productPrice*$quantity,
@@ -64,7 +64,13 @@ class OrdersRepository extends BaseRepository{
         foreach($offers as $off){
             $offer=Offer::find($off['id']);
             $offerPrice+=$offer->price;
-            $order->stocks=json_encode($off['stocks']);
+            $order->contents()->create([
+                'quantity'=>1,
+                'price'=>$offer->price,
+                'contentable_id'=>$offer->id,
+                'contentable_type'=>Offer::class,
+                'stocks'=>json_encode($off['stocks'])
+            ]);
             foreach($off['stocks'] as $stock){
                 $stock=Stock::find($stock);
                 $stock->quantity-=1;

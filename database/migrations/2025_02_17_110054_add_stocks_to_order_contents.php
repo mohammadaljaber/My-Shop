@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('order_contents', function (Blueprint $table) {
             $table->jsonb('stocks')->nullable();
+
         });
     }
 
