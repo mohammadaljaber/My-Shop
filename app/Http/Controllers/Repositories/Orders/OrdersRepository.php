@@ -7,7 +7,7 @@ use App\Models\Offer;
 use App\Models\Stock;
 use App\Http\Controllers\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Auth;
 
 class OrdersRepository extends BaseRepository{
 
@@ -22,8 +22,8 @@ class OrdersRepository extends BaseRepository{
 
     public function store($data):Model
     {
-        $order=auth()->user->orders->cerate([
-            'costumer_id'=>auth()->user->id,
+        $order=Order::create([
+            'costumer_id'=>auth()->user()->id,
             'total_price'=>0
         ]);
         $total_price=$this->storeOrderItems($data,$order);
@@ -48,7 +48,7 @@ class OrdersRepository extends BaseRepository{
     private function attachProductToOrderItems(Order $order,Stock $product,$quantity=1){
         $productPrice=$product->price;
         ($productPrice)?:$product->product->price;
-        $order->contents->create([
+        $order->contents()->create([
             'quantity'=>$quantity,
             'price'=>$productPrice*$quantity,
             'contentable_id'=>$product->id,
@@ -62,10 +62,10 @@ class OrdersRepository extends BaseRepository{
     private function attachOffersToOrderItems(Order $order,$offers){
         $offerPrice=0;
         foreach($offers as $off){
-            $offer=Offer::find($off->id);
+            $offer=Offer::find($off['id']);
             $offerPrice+=$offer->price;
-            $order->stocks=json_encode($off->stocks);
-            foreach($off->stocks as $stock){
+            $order->stocks=json_encode($off['stocks']);
+            foreach($off['stocks'] as $stock){
                 $stock=Stock::find($stock);
                 $stock->quantity-=1;
                 $stock->update();
