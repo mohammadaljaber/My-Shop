@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Offer extends Model
 {
     protected $guarded=[];
-
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public function items(){
         return $this->hasMany(OfferItem::class,'offer_id');
     }

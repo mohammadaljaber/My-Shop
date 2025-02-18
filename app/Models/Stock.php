@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Stock extends Model
 {
     protected $guarded=[];
-
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public function product(){
         return $this->belongsTo(Product::class,'product_id');
     }

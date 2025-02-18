@@ -9,7 +9,10 @@ class Order extends Model
 {
     use SoftDeletes;
     protected $guarded=[];
-
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public function costumer(){
         return $this->belongsTo(User::class,'costumer_id');
     }

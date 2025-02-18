@@ -111,7 +111,7 @@ class OfferResource extends Resource
         return [
             'index' => Pages\ListOffers::route('/'),
             'create' => Pages\CreateOffer::route('/create'),
-            'view' => Pages\ViewOffer::route('/{record}'),
+            // 'view' => Pages\ViewOffer::route('/{record}'),
             'edit' => Pages\EditOffer::route('/{record}/edit'),
         ];
     }
